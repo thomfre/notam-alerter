@@ -76,7 +76,7 @@ ${notam.icaoMessage}`;
 
     switch (recipient.type) {
         case RecipientType.Mail:
-            sendMail(
+            await sendMail(
                 subject,
                 `${content}
 
@@ -87,7 +87,7 @@ This alert was brought to you by ${env.SENDER_NAME}`,
             );
             break;
         case RecipientType.Slack:
-            sendSlack(subject, content, recipient, env);
+            await sendSlack(subject, content, recipient, env);
             break;
     }
 };

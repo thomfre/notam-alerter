@@ -23,15 +23,15 @@ export interface Env {
 }
 
 export enum RecipientType {
-    Mail,
-    Slack,
+    Mail = 'Mail',
+    Slack = 'Slack',
 }
 
 export interface Recipient {
     key: string;
     name: string;
-    email: string;
-    url: string;
+    email?: string;
+    url?: string;
     type: RecipientType;
 }
 

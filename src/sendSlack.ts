@@ -1,6 +1,10 @@
 import { Env, Recipient } from '.';
 
 export const sendSlack = async (subject: string, content: string, recipient: Recipient, env: Env) => {
+    if (!recipient.url) {
+        return;
+    }
+
     let send_request = new Request(recipient.url, {
         method: 'POST',
         headers: {

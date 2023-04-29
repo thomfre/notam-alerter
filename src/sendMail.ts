@@ -1,6 +1,10 @@
 import { Env, Recipient } from '.';
 
 export const sendMail = async (subject: string, content: string, recipient: Recipient, env: Env) => {
+    if (!recipient.email) {
+        return;
+    }
+
     let send_request = new Request('https://api.mailchannels.net/tx/v1/send', {
         method: 'POST',
         headers: {

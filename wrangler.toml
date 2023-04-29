@@ -2,5 +2,15 @@ name = "notam-alerter"
 main = "src/index.ts"
 compatibility_date = "2023-04-29"
 
+kv_namespaces = [
+  { binding = "STORAGE", id = "4f8618960188487e9e9684518238e53d" }
+]
+
 [triggers]
 crons = [ "0 */2 * * *" ]
+
+[vars]
+AIRPORT_CODES = "ENHD"
+DKIM_DOMAIN = "limanovember.aero"
+DKIM_SELECTOR = "mailchannels"
+SENDER_NAME = "LimaNovember.Aero"
