@@ -1,23 +1,8 @@
 import { Env, Recipient, RecipientType } from '.';
 import { sendMail } from './sendMail';
 import { sendSlack } from './sendSlack';
-
-const getNotamDate = (date: string): Date => {
-    const mainParts = date.split(' ');
-    const dateParts = mainParts[0].split('/');
-    const hh = mainParts[1].substring(0, 2);
-    const mm = mainParts[1].substring(2, 4);
-
-    return new Date(
-        Date.UTC(
-            parseInt(dateParts[2]),
-            parseInt(dateParts[0]) - 1, //this is monthIndex not Month!
-            parseInt(dateParts[1]),
-            parseInt(hh),
-            parseInt(mm)
-        )
-    );
-};
+import { getLocalOpeningHours } from './tools/getLocalOpeningHours';
+import { getNotamDate } from './tools/timeTools';
 
 export const sendAlert = async (notam: any, recipient: Recipient, env: Env) => {
     const startDate = getNotamDate(notam.startDate);
@@ -55,6 +40,8 @@ The new NOTAM is valid from ${startDateString} to ${endDateString}.
 The new opening hours will be (UTC):
 ${notam.traditionalMessageFrom4thWord.replace('AD HR OF SER:', '').trim().split(', ').join('\n')}
 
+In local time:
+${getLocalOpeningHours(notam)}
 
 Complete NOTAM:
 ${notam.icaoMessage}`;
