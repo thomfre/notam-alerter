@@ -1,0 +1,14 @@
+[*.{js,ts,tsx}]
+quote_type = single
+
+[*.{js,ts,tsx,json,yml,md}]
+insert_final_newline = true
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 180
+
+[*.{json,yml}]
+indent_size = 2
