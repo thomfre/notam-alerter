@@ -14,7 +14,7 @@ import { sendAlert } from './sendAlert';
 
 export interface Env {
     AIRPORT_CODES: string;
-    NOTAMALERTS: KVNamespace;
+    STORAGE: KVNamespace;
     DKIM_DOMAIN: string;
     DKIM_SELECTOR: string;
     DKIM_PRIVATE_KEY: string;
@@ -37,7 +37,7 @@ export interface Recipient {
 
 export default {
     async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
-        const { NOTAMALERTS, DKIM_PRIVATE_KEY } = env;
+        const { STORAGE } = env;
 
         let notams = await fetch('https://notams.aim.faa.gov/notamSearch/search', {
             method: 'POST',
@@ -55,10 +55,10 @@ export default {
             return;
         }
 
-        const recipients: Recipient[] = (await NOTAMALERTS.get('recipients', { type: 'json' })) ?? [];
+        const recipients: Recipient[] = (await STORAGE.get('recipients', { type: 'json' })) ?? [];
 
         for (const recipient of recipients) {
-            const alreadyAlerted = (await NOTAMALERTS.get<string[]>(recipient.key, { type: 'json' })) ?? [];
+            const alreadyAlerted = (await STORAGE.get<string[]>(recipient.key, { type: 'json' })) ?? [];
 
             const relevant = filteredNotams.filter((n: any) => !alreadyAlerted.includes(n.notamNumber));
 
@@ -70,7 +70,7 @@ export default {
                 await sendAlert(notam, recipient, env);
             }
 
-            await NOTAMALERTS.put(recipient.key, JSON.stringify([...alreadyAlerted, ...relevant.map((n: any) => n.notamNumber)]));
+            await STORAGE.put(recipient.key, JSON.stringify([...alreadyAlerted, ...relevant.map((n: any) => n.notamNumber)]));
         }
     },
 };
