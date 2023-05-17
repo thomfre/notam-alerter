@@ -48,7 +48,7 @@ export default {
         }).then<any>((r) => r.json());
 
         const filteredNotams = notams.notamList.filter(
-            (n: any) => n.traditionalMessageFrom4thWord.includes('AD HR OF SER') || n.traditionalMessageFrom4thWord.includes('CLSD DUE')
+            (n: any) => n.traditionalMessageFrom4thWord.includes('AD HR OF SER') || n.traditionalMessageFrom4thWord.includes('CLSD DUE') || n.traditionalMessageFrom4thWord.includes('CLOSED DUE')
         );
 
         if (filteredNotams.length === 0) {

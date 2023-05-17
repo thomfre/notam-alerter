@@ -45,8 +45,8 @@ ${getLocalOpeningHours(notam)}
 
 Complete NOTAM:
 ${notam.icaoMessage}`;
-    } else if (notam.traditionalMessageFrom4thWord.includes('RWY') && notam.traditionalMessageFrom4thWord.includes('CLSD DUE')) {
-        const rwy = notam.traditionalMessageFrom4thWord.split('CLSD DUE');
+    } else if (notam.traditionalMessageFrom4thWord.includes('RWY') && (notam.traditionalMessageFrom4thWord.includes('CLSD DUE') || notam.traditionalMessageFrom4thWord.includes('CLOSED DUE'))) {
+        const rwy = notam.traditionalMessageFrom4thWord.includes('CLSD DUE') ? notam.traditionalMessageFrom4thWord.split('CLSD DUE') : notam.traditionalMessageFrom4thWord.split('CLOSED DUE');
 
         subject = `⚠️ Runway closure detected on ${notam.facilityDesignator}`;
         content = `A new runway closure was detected on ${notam.facilityDesignator}, make sure to check this before you plan your next trip.
