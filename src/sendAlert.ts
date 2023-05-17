@@ -45,13 +45,18 @@ ${getLocalOpeningHours(notam)}
 
 Complete NOTAM:
 ${notam.icaoMessage}`;
-    } else if (notam.traditionalMessageFrom4thWord.includes('RWY') && (notam.traditionalMessageFrom4thWord.includes('CLSD DUE') || notam.traditionalMessageFrom4thWord.includes('CLOSED DUE'))) {
-        const rwy = notam.traditionalMessageFrom4thWord.includes('CLSD DUE') ? notam.traditionalMessageFrom4thWord.split('CLSD DUE') : notam.traditionalMessageFrom4thWord.split('CLOSED DUE');
+    } else if (
+        (notam.traditionalMessageFrom4thWord.includes('RWY') || notam.traditionalMessageFrom4thWord.includes('RUNWAY')) &&
+        (notam.traditionalMessageFrom4thWord.includes('CLSD DUE') || notam.traditionalMessageFrom4thWord.includes('CLOSED DUE'))
+    ) {
+        const rwy = notam.traditionalMessageFrom4thWord.includes('CLSD DUE')
+            ? notam.traditionalMessageFrom4thWord.split('CLSD DUE')
+            : notam.traditionalMessageFrom4thWord.split('CLOSED DUE');
 
         subject = `⚠️ Runway closure detected on ${notam.facilityDesignator}`;
         content = `A new runway closure was detected on ${notam.facilityDesignator}, make sure to check this before you plan your next trip.
 
-Runway ${rwy[0].replace('RWY', '').trim()} is closed due to ${rwy[1].trim()} from ${startDateString} to ${endDateString}
+Runway ${rwy[0].replace('RWY', '').replace('RUNWAY', '').trim()} is closed due to ${rwy[1].trim()} from ${startDateString} to ${endDateString}
 
 Complete NOTAM:
 ${notam.icaoMessage}`;
