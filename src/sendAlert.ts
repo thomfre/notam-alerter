@@ -32,6 +32,7 @@ export const sendAlert = async (notam: any, recipient: Recipient, env: Env) => {
     let subject = undefined;
     let content = undefined;
 
+    // Opening hours
     if (notam.traditionalMessageFrom4thWord.includes('AD HR OF SER')) {
         subject = `⌚ New opening hours detected on ${notam.facilityDesignator}`;
         content = `A new opening hour NOTAM has been detected for ${notam.facilityDesignator}.
@@ -45,12 +46,45 @@ ${getLocalOpeningHours(notam)}
 
 Complete NOTAM:
 ${notam.icaoMessage}`;
-    } else if (
+    }
+    // PPR
+    else if (notam.traditionalMessageFrom4thWord.includes('PPR ')) {
+        subject = `⚠️ Aerodrome PPR requirement detected on ${notam.facilityDesignator}`;
+        content = `A new aerodrome PPR requirement was detected on ${notam.facilityDesignator}, make sure to check this before you plan your next trip.
+
+Complete NOTAM:
+${notam.icaoMessage}`;
+    }
+    // Aerodrome closure
+    else if (
+        (notam.traditionalMessageFrom4thWord.includes('AD') || notam.traditionalMessageFrom4thWord.includes('AERODROME')) &&
+        (notam.traditionalMessageFrom4thWord.includes('CLSD') || notam.traditionalMessageFrom4thWord.includes('CLOSED'))
+    ) {
+        const msg = notam.traditionalMessageFrom4thWord.includes('CLSD DUE')
+            ? notam.traditionalMessageFrom4thWord.split('CLSD DUE')
+            : notam.traditionalMessageFrom4thWord.includes('CLSD')
+            ? notam.traditionalMessageFrom4thWord.split('CLSD')
+            : notam.traditionalMessageFrom4thWord.split('CLOSED DUE');
+
+        subject = `⚠️ Aerodrome closure detected on ${notam.facilityDesignator}`;
+        content = `A new aerodrome closure was detected on ${notam.facilityDesignator}, make sure to check this before you plan your next trip.
+
+Aerodrome is closed due to ${msg[1].trim()} from ${startDateString} to ${endDateString}
+
+Complete NOTAM:
+${notam.icaoMessage}`;
+    }
+    // Runway closure
+    else if (
         (notam.traditionalMessageFrom4thWord.includes('RWY') || notam.traditionalMessageFrom4thWord.includes('RUNWAY')) &&
-        (notam.traditionalMessageFrom4thWord.includes('CLSD DUE') || notam.traditionalMessageFrom4thWord.includes('CLOSED DUE'))
+        (notam.traditionalMessageFrom4thWord.includes('CLSD DUE') ||
+            notam.traditionalMessageFrom4thWord.includes('CLOSED DUE') ||
+            notam.traditionalMessageFrom4thWord.includes('CLSD'))
     ) {
         const rwy = notam.traditionalMessageFrom4thWord.includes('CLSD DUE')
             ? notam.traditionalMessageFrom4thWord.split('CLSD DUE')
+            : notam.traditionalMessageFrom4thWord.includes('CLSD')
+            ? notam.traditionalMessageFrom4thWord.split('CLSD')
             : notam.traditionalMessageFrom4thWord.split('CLOSED DUE');
 
         subject = `⚠️ Runway closure detected on ${notam.facilityDesignator}`;
