@@ -52,6 +52,10 @@ export default {
                 n.traditionalMessageFrom4thWord.includes('AD HR OF SER') ||
                 n.traditionalMessageFrom4thWord.includes('CLSD DUE') ||
                 n.traditionalMessageFrom4thWord.includes('CLSD ') ||
+                n.traditionalMessageFrom4thWord.includes('AD CLOSED ') ||
+                n.traditionalMessageFrom4thWord.includes('AD CLSD ') ||
+                n.traditionalMessageFrom4thWord.includes('AERODROME CLSD ') ||
+                n.traditionalMessageFrom4thWord.includes('AERODROME CLOSED ') ||
                 n.traditionalMessageFrom4thWord.includes('CLOSED DUE') ||
                 n.traditionalMessageFrom4thWord.includes('PPR ')
         );
